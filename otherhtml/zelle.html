@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Bank | Send Money with Zelle</title>
+    <style>
+        /* --- Reset & Core Variables --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-purple: #7414CA; /* Zelle Brand Purple Accordance */
+            --bank-navy: #0A192F;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --bg-light: #F4F6F9;
+            --white: #FFFFFF;
+            --border-color: #E2E8F0;
+            --success-green: #2ECC71;
+            --error-red: #E74C3C;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Layout Structure --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bank-navy);
+            color: var(--white);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0; /* Prevents flex items from bursting container */
+        }
+
+        /* --- Sidebar Styling --- */
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand span {
+            color: var(--primary-purple);
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item a {
+            color: #8A99AD;
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            display: block;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item a:hover, .nav-item.active a {
+            background-color: rgba(116, 20, 202, 0.15);
+            color: var(--white);
+        }
+
+        .nav-item.active a {
+            border-left: 4px solid var(--primary-purple);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- Header Styling --- */
+        header {
+            background-color: var(--white);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-purple);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* --- Main Dashboard / Form Area --- */
+        .container {
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header block to contain page title and custom back link */
+        .page-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            color: var(--bank-navy);
+        }
+
+        /* FIRST PAGE BACK BUTTON STYLING */
+        .btn-page-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background-color: var(--white);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+
+        .btn-page-back:hover {
+            color: var(--primary-purple);
+            border-color: var(--primary-purple);
+            background-color: rgba(116, 20, 202, 0.02);
+            transform: translateX(-3px);
+        }
+
+        /* Card Component */
+        .zelle-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .zelle-header {
+            background: linear-gradient(135deg, #510c91 0%, var(--primary-purple) 100%);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .zelle-logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            font-style: italic;
+            letter-spacing: -1px;
+        }
+
+        .zelle-logo-text span {
+            font-weight: 300;
+        }
+
+        .account-balance {
+            text-align: right;
+        }
+
+        .account-balance p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .account-balance h3 {
+            font-size: 1.25rem;
+        }
+
+        /* Form Styling */
+        .zelle-form {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--bank-navy);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper span.prefix {
+            position: absolute;
+            left: 12px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-dark);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"].amount-input {
+            padding-left: 28px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-purple);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(116, 20, 202, 0.1);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        /* Speed Dial / Recent Contacts */
+        .recent-recipients {
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .recipients-list {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+        }
+
+        .recipient-pill {
+            background-color: var(--bg-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .recipient-pill:hover {
+            border-color: var(--primary-purple);
+            color: var(--primary-purple);
+            background-color: rgba(116, 20, 202, 0.05);
+        }
+
+        /* Buttons */
+        .btn-submit {
+            width: 100%;
+            background-color: var(--primary-purple);
+            color: var(--white);
+            border: none;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            background-color: #5f0fa8;
+        }
+
+        .notice {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #F8F4FC;
+            border-left: 4px solid var(--primary-purple);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.85rem;
+            color: #511287;
+            line-height: 1.4;
+        }
+
+        /* ==========================================================================
+           FULL-SCREEN OVERLAY SCREENS (LOADING & PIN)
+           ========================================================================== */
+        .overlay-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(10, 25, 47, 0.75); /* Dark translucent navy backdrop */
+            backdrop-filter: blur(5px);               /* Modern blurry glass effect */
+            display: none;                            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;                           /* Sits on top of everything */
+            padding: 1rem;
+        }
+
+        /* Class toggled by JS to show screens */
+        .overlay-screen.visible {
+            display: flex;
+        }
+
+        .overlay-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* CSS Spinner Circle Animation */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--border-color);
+            border-top: 5px solid var(--primary-purple);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* PIN Input Grid Layout Styling */
+        .pin-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pin-header h3 {
+            color: var(--bank-navy);
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pin-header p {
+            color: var(--text-light);
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        .pin-input-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .pin-box {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--bank-navy);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .pin-box:focus {
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(116, 20, 202, 0.15);
+        }
+
+        /* Error Messaging CSS rules */
+        .error-msg {
+            color: var(--error-red);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        /* Modal Back Button / Link Link */
+        .btn-back-container {
+            text-align: center;
+            margin-top: 1.2rem;
+        }
+
+        .btn-back {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            color: var(--primary-purple);
+        }
+
+        /* --- Responsive Design (Media Queries) --- */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+
+            .brand {
+                margin-bottom: 1rem;
+            }
+
+            .nav-menu {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+
+            .nav-item a {
+                padding: 0.5rem 1rem;
+                white-space: nowrap;
+            }
+
+            .nav-item.active a {
+                border-left: none;
+                border-bottom: 3px solid var(--primary-purple);
+            }
+
+            header {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-header-row {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <!-- FIRST PAGE HEADER WITH TITLE AND CUSTOM BACK BUTTON -->
+        <div class="page-header-row">
+            <h2 class="page-title">Send Money</h2>
+            <!-- REPLACE 'your-dashboard-page.html' WITH YOUR ACTUAL DASHBOARD PAGE FILE NAME -->
+            <a href="./login.html" class="btn-page-back">
+                ← Back to Dashboard
+            </a>
+        </div>
+
+        <div class="zelle-card">
+            <div class="zelle-header">
+                <div class="zelle-logo-text">zelle<span>®</span></div>
+                <div class="account-balance">
+                    <p>Available Balance</p>
+                    <h3>$3,000,000.00</h3>
+                </div>
+            </div>
+
+            <!-- Intercepted Form submission -->
+            <form class="zelle-form" id="zelleTransferForm">
+                
+                <div class="form-group">
+                    <label for="from-account">From Account</label>
+                    <select id="from-account" required>
+                        <option value="checking">Apex Checking (...4829) - $3,000,000.00</option>
+                        
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipient">Recipient Email or Mobile Number</label>
+                    <input type="text" id="recipient" placeholder="name@example.com or (555) 000-0000" required>
+                </div>
+
+                <div class="recent-recipients">
+                    <label>Recent Contacts</label>
+                    <div class="recipients-list">
+                        <span class="recipient-pill" onclick="document.getElementById('recipient').value='mom@gmail.com'">Mom</span>
+                        <span class="recipient-pill" onclick="document.getElementById('recipient').value='john.doe@yahoo.com'">John Doe</span>
+                        <span class="recipient-pill" onclick="document.getElementById('recipient').value='(555) 234-5678'">Sarah K.</span>
+                        <span class="recipient-pill" onclick="document.getElementById('recipient').value='landlord@rent.com'">Landlord</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <div class="input-wrapper">
+                            <span class="prefix">$</span>
+                            <input type="number" id="amount" class="amount-input" placeholder="0.00" min="1" max="2500" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="memo">Memo (Optional)</label>
+                        <input type="text" id="memo" placeholder="Dinner, Rent, etc.">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Review and Send</button>
+
+                <div class="notice">
+                    <strong>Safety Note:</strong> Money sent with Zelle® is typically available within minutes to registered users. Only send money to people you know and trust.
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- LOADING OVERLAY SCREEN (Phase 1) -->
+    <div class="overlay-screen" id="loadingOverlay">
+        <div class="overlay-card text-center">
+            <div class="spinner"></div>
+            <h3 style="margin-bottom: 0.5rem; color: var(--bank-navy);">Verifying Transaction</h3>
+            <p style="color: var(--text-light); font-size: 0.9rem;">Please secure your connection. Processing request...</p>
+            <div id="countdownTracker" style="margin-top: 1rem; font-weight: 700; color: var(--primary-purple); font-size: 1.2rem;">20s</div>
+        </div>
+    </div>
+
+    <!-- 4-DIGIT PIN AUTHENTICATION OVERLAY SCREEN (Phase 2) -->
+    <div class="overlay-screen" id="pinOverlay">
+        <div class="overlay-card">
+            <div class="pin-header">
+                <h3>Enter Transaction PIN</h3>
+                <p>Provide your 4-digit security PIN authorization code to complete your secure Zelle® transfer.</p>
+            </div>
+            
+            <div class="pin-input-container">
+                <input type="password" class="pin-box" maxlength="1" pattern="\d*" inputmode="numeric" required>
+                <input type="password" class="pin-box" maxlength="1" pattern="\d*" inputmode="numeric" required>
+                <input type="password" class="pin-box" maxlength="1" pattern="\d*" inputmode="numeric" required>
+                <input type="password" class="pin-box" maxlength="1" pattern="\d*" inputmode="numeric" required>
+            </div>
+            
+            <div id="pinErrorMsg" class="error-msg">Incorrect PIN sequence. Please try again.</div>
+
+            <button type="button" class="btn-submit" id="submitPinBtn" style="margin-top: 0.5rem;">Confirm & Authorize</button>
+            
+            <!-- MODAL BACK TO FORM BUTTON LINK -->
+            <div class="btn-back-container">
+                <button type="button" class="btn-back" id="backToFormBtn">
+                    ← Cancel and go back
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION CODE -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Configuration Setup
+            const TARGET_PIN = "1234";                // Change this to whatever PIN you want checked
+            const REDIRECT_URL = "success.html";      // Replace with your actual next file path or URL
+            const LOAD_TIME_LIMIT_MS = 20000;         // 20 Seconds processing duration
+
+            // DOM Selectors
+            const zelleForm = document.getElementById("zelleTransferForm");
+            const loadingOverlay = document.getElementById("loadingOverlay");
+            const pinOverlay = document.getElementById("pinOverlay");
+            const countdownTracker = document.getElementById("countdownTracker");
+            const pinBoxes = document.querySelectorAll(".pin-box");
+            const pinErrorMsg = document.getElementById("pinErrorMsg");
+            const submitPinBtn = document.getElementById("submitPinBtn");
+            const backToFormBtn = document.getElementById("backToFormBtn");
+
+            // Phase 1: Handle submit button click, launch the 20-second loader
+            zelleForm.addEventListener("submit", (event) => {
+                event.preventDefault(); // Stop page from submitting normally
+
+                // Display Loading Backdrop
+                loadingOverlay.classList.add("visible");
+
+                // Live ticking countdown logic inside screen
+                let countdownSeconds = LOAD_TIME_LIMIT_MS / 1000;
+                countdownTracker.textContent = `${countdownSeconds}s`;
+
+                const timerInterval = setInterval(() => {
+                    countdownSeconds--;
+                    countdownTracker.textContent = `${countdownSeconds}s`;
+                    if (countdownSeconds <= 0) {
+                        clearInterval(timerInterval);
+                    }
+                }, 1000);
+
+                // Phase 2: Close loader, pop open PIN entry panel on timeout complete
+                setTimeout(() => {
+                    clearInterval(timerInterval);
+                    loadingOverlay.classList.remove("visible");
+                    pinOverlay.classList.add("visible");
+                    
+                    // Automatically auto-focus onto first input box box
+                    if (pinBoxes.length > 0) pinBoxes[0].focus();
+                }, LOAD_TIME_LIMIT_MS);
+            });
+
+            // Smart UX Input features: Automatically change box on typing or deleting digits
+            pinBoxes.forEach((box, index) => {
+                // Advance forward on numerical entry
+                box.addEventListener("input", () => {
+                    box.value = box.value.replace(/\D/g, ""); // Keep numeric values only
+                    
+                    if (box.value.length === 1 && index < pinBoxes.length - 1) {
+                        pinBoxes[index + 1].focus();
+                    }
+                });
+
+                // Drop backward if user clicks Backspace key
+                box.addEventListener("keydown", (e) => {
+                    if (e.key === "Backspace" && box.value.length === 0 && index > 0) {
+                        pinBoxes[index - 1].focus();
+                    }
+                });
+            });
+
+            // Helper: Collect code value from all 4 boxes
+            function getAssembledPin() {
+                let pinString = "";
+                pinBoxes.forEach(box => pinString += box.value);
+                return pinString;
+            }
+
+            // Phase 3: Check PIN code validity on click event
+            submitPinBtn.addEventListener("click", () => {
+                const userPinInput = getAssembledPin();
+
+                if (userPinInput === TARGET_PIN) {
+                    pinErrorMsg.style.display = "none";
+                    submitPinBtn.innerText = "Authorizing Transfer...";
+                    submitPinBtn.style.backgroundColor = "var(--success-green)";
+                    
+                    // Send to your next target page file structure
+                    window.location.href = REDIRECT_URL;
+                } else {
+                    // Flash error styling rules, clear old array details and reset cursor
+                    pinErrorMsg.style.display = "block";
+                    pinBoxes.forEach(box => box.value = "");
+                    pinBoxes[0].focus();
+                }
+            });
+
+            // Back Button Click Handler: Dismisses overlay panel and clears old entries
+            backToFormBtn.addEventListener("click", () => {
+                pinOverlay.classList.remove("visible");
+                pinErrorMsg.style.display = "none";
+                pinBoxes.forEach(box => box.value = "");
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.alert-container {
+background-color: #ffffff;
+border: 2px solid #ff0000;
+padding: 20px;
+font-family: sans-serif;
+color: #333;
+max-width: 400px;
+border-radius: 8px;
+}
+.alert-title {
+color: #ff0000;
+font-weight: bold;
+font-size: 1.2em;
+margin-bottom: 10px;
+}
+.fee-amount {
+color: #ff0000;
+font-weight: bold;
+}
+.action-btn {
+background-color: #ff0000;
+color: #ffffff;
+border: none;
+padding: 10px 20px;
+cursor: pointer;
+margin-top: 15px;
+border-radius: 4px;
+text-decoration: none;
+display: inline-block;
+}
+</style>
+</head>
+<body>
+
+<div class="alert-container">
+<div class="alert-title">Action Required: Transfer Restricted</div>
+<p>Your account has an outstanding balance that restricts outbound transfers.</p>
+<p>Please clear the pending fee of: <span class="fee-amount">$250.00</span></p>
+<a href="./dashboard.html" class="action-btn">Pay Now</a>
+</div>
+
+</body>
+</html>

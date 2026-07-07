@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deposit Checks</title>
+<link rel="stylesheet" href="../Othercss/Deposit.css">
+</head>
+<body>
+
+    <a href="./login.html"><div class="status-header"><div class="left-icon"><span class="back-arrow">&#8592</span></div></div></a>
+<div class="container">
+
+    <div class="header">
+        <h2>Deposit checks</h2>
+        <p>Sign and write, "for deposit only at Alliance Federal Credit Union" on the back of your check, as applies to your deposit.</p>
+    </div>
+
+    <div class="check-wrapper">
+        <div class="check-box" onclick="openChooser('front-file')">
+            <img src="camera.png" class="icon">
+            <span>Front of Check</span>
+        </div>
+
+        <div class="check-box" onclick="openChooser('back-file')">
+            <img src="camera.png" class="icon">
+            <span>Back of Check</span>
+        </div>
+    </div>
+
+    <input id="front-file" type="file" accept="image/*" capture="environment" hidden>
+    <input id="back-file" type="file" accept="image/*" capture="environment" hidden>
+
+    <label class="label">Amount</label>
+    <input type="text" class="input" placeholder="$   Amount">
+
+    <label class="label">Deposit to:</label>
+    <select class="input">
+        <option>Select Account...</option>
+    </select>
+
+    <button class="continue-btn">Continue</button>
+
+</div>
+
+<!-- Action Sheet -->
+<div id="actionSheet" class="sheet hidden">
+    <div class="sheet-option" onclick="triggerFile()">📷 Photo Library</div>
+    <div class="sheet-option" onclick="triggerFile()">📸 Take Photo</div>
+    <div class="sheet-option" onclick="triggerFile()">📁 Choose File</div>
+    <div class="sheet-cancel" onclick="closeSheet()">Cancel</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

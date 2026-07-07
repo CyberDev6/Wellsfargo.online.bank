@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wells Fargo - Secure Profile Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Wells Fargo Standard Theme */
+:root {
+    --wf-red: #990000;
+    --wf-dark-red: #7A0000;
+    --wf-gold: #D1A153;
+    --wf-light-gold: #FDF4E7;
+    --text-dark: #333333;
+    --text-muted: #666666;
+    --bg-light: #F4F4F4;
+    --border-color: #D5D5D5;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    font-size: 14px;
+    line-height: 1.5;
+    padding-bottom: 40px;
+}
+
+/* Top Utility Bar */
+.top-bar {
+    background-color: #FFFFFF;
+    border-bottom: 3px solid var(--wf-red);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.brand-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.back-arrow {
+    color: var(--wf-red);
+    text-decoration: none;
+    font-size: 24px;
+    margin-right: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.brand-logo {
+    color: var(--wf-red);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+}
+
+.brand-logo span {
+    color: var(--text-dark);
+    font-weight: 400;
+}
+
+.security-badge {
+    background-color: var(--wf-light-gold);
+    border: 1px solid var(--wf-gold);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #8A6D3B;
+}
+
+/* Content Layout Containers */
+.main-content {
+    max-width: 650px;
+    margin: 30px auto 0 auto;
+    padding: 0 20px;
+}
+
+.profile-card, .password-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 25px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+}
+
+.card-title {
+    font-size: 18px;
+    color: var(--text-dark);
+    font-weight: 700;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid var(--wf-red);
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.name {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: -15px;
+    margin-bottom: 20px;
+}
+
+/* Field Components */
+.field {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.field label {
+    display: block;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--wf-red);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+input[type="text"], input[type="password"], textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: #FAFAFA;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+    border-color: var(--wf-red);
+    background: #FFFFFF;
+}
+
+input[readonly], textarea[readonly] {
+    background: #F4F4F4;
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.required {
+    font-size: 11px;
+    color: var(--wf-red);
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-weight: 600;
+}
+
+.requirements {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-left: 20px;
+    margin-top: 15px;
+}
+
+.requirements li {
+    margin-bottom: 5px;
+}
+
+/* Interaction Controls */
+.save-btn {
+    background-color: var(--wf-red);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 15px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+    transition: background 0.2s;
+}
+
+.save-btn:hover { 
+    background-color: var(--wf-dark-red); 
+}
+
+/* Modal Feedback Interface */
+#successPopup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-content {
+    background: white;
+    padding: 40px;
+    border-radius: 4px;
+    text-align: center;
+    max-width: 400px;
+    border-top: 8px solid var(--wf-red);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.success-icon {
+    font-size: 50px;
+    color: #2b7812;
+    margin-bottom: 15px;
+}
+
+.loading {
+    background-color: #cccccc !important;
+    cursor: not-allowed;
+}
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+    <div class="brand-wrapper">
+        <a href="./login.html" class="back-arrow">←</a>
+        <div class="brand-logo">WELLS <span>FARGO</span></div>
+    </div>
+    <div class="security-badge">
+        🔒 Secure Session
+    </div>
+</header>
+
+<main class="main-content">
+
+    <!-- Profile Overview Information Block -->
+    <section class="profile-card">
+        <div class="profile-header">
+            <img src="../Photos/p2.jpg" alt="Profile Photo" class="avatar">
+            <h1 class="name">First Lastname</h1>
+        </div>
+
+        <div class="field">
+            <label>Full Name</label>
+            <input type="text" value="  TAMMELLA LUCIETTO" readonly>
+        </div>
+
+        <div class="field">
+            <label>Email Address</label>
+            <input type="text" value="   " readonly>
+        </div>
+
+        <div class="field">
+            <label>Phone Number</label>
+            <input type="text" value="" readonly>
+        </div>
+
+        <div class="field">
+            <label>Primary Location</label>
+            <textarea readonly rows="2">.</textarea>
+        </div>
+    </section>
+
+    <!-- Credential Management Block -->
+    <section class="password-card">
+        <h2 class="card-title">Password Requirements</h2>
+        <p class="subtitle">Ensure that these security standards are met</p>
+
+        <div class="field">
+            <label>Current Password</label>
+            <input type="password" placeholder="" required id="currPass">
+            <span class="required">(required)</span>
+        </div>
+
+        <div class="field">
+            <label>New Password</label>
+            <input type="password" placeholder="" required id="newPass">
+            <span class="required">(required)</span>
+        </div>
+
+        <div class="field">
+            <label>Confirm Password</label>
+            <input type="password" placeholder="" required id="confirmPass">
+            <span class="required">(required)</span>
+        </div>
+
+        <ul class="requirements">
+            <li>Minimum 8 characters long - the more, the better</li>
+            <li>At least one lowercase character.</li>
+            <li>At least one uppercase character.</li>
+            <li>At least one number.</li>
+        </ul>
+
+        <button class="save-btn" id="changeBtn">CHANGE PASSWORD</button>
+    </section>
+
+</main>
+
+<!-- Verification Notification Overlay -->
+<div id="successPopup">
+    <div class="popup-content">
+        <div class="success-icon">✓</div>
+        <h3>Success!</h3>
+        <p style="margin-bottom: 20px; color: var(--text-muted);">Password successfully changed.</p>
+        <button class="save-btn" onclick="location.reload()">OK</button>
+    </div>
+</div>
+
+<script>
+const changeBtn = document.getElementById('changeBtn');
+const successPopup = document.getElementById('successPopup');
+
+changeBtn.addEventListener('click', function() {
+    // Provide explicit contextual loading state feedback
+    this.innerText = "CHANGING PASSWORD...";
+    this.classList.add('loading');
+
+    // Exactly 10 seconds (10000ms) execution cycle delay simulation
+    setTimeout(() => {
+        successPopup.style.display = 'flex';
+        this.innerText = "CHANGE PASSWORD";
+        this.classList.remove('loading');
+    }, 10000);
+});
+</script>
+
+</body>
+</html>
